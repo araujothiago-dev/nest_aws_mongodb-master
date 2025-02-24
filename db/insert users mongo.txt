@@ -1,0 +1,7 @@
+db.users.insertOne({
+  name: "Jose Silva",
+  email: "jose.silva@email.com",
+  senha: "senha123",
+  avatarUrl: "avatar",
+  balance: 300
+});
