@@ -1,0 +1,53 @@
+name: CI/CD Pipeline
+
+on:
+  # push:
+  #   branches:
+  #     - main
+  #     - master
+  #     - develop
+  pull_request:
+    branches:
+      - main
+      - master
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Extract branch name
+        shell: bash
+        run: echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
+        id: extract_branch
+
+      # - name: Install dependencies
+      #   run: npm install
+
+      - name: Run tests
+        run: npm test
+
+      # - name: Build project
+      #   run: npm run build
+
+      # - name: Deploy to AWS
+      #   env:
+      #     AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      #     AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      #     AWS_REGION: 'us-east-1'
+      #     BRANCH_NAME: ${{ env.BRANCH_NAME }}
+      #   run: |
+      #     # Comandos para fazer o deploy na AWS
+      #     echo "Deploying to AWS from branch $BRANCH_NAME..."
+
+      # - name: Notify CI process
+      #   uses: app

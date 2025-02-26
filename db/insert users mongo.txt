@@ -1,7 +1,25 @@
+# acessar ou criar um novo banco mongo
+use <db>
+db.minha_colecao.insertOne({ nome: "orders" })
+
+db.changeUserPassword("root", "******")
+
+
+db.createUser({
+  user: "root",
+  pwd: "******",
+  roles: [{ role: "readWrite", db: "orders" }]
+})
+
 db.users.insertOne({
   name: "Jose Silva",
   email: "jose.silva@email.com",
-  senha: "senha123",
+  senha: "******",
   avatarUrl: "avatar",
   balance: 300
+});
+
+db.orders.insertOne({
+  user: ObjectId('67bcc2c1***865db5551e946'),
+  orderAmount: 300
 });

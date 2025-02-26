@@ -1,14 +1,14 @@
 import { Injectable } from '@nestjs/common';
-import { CreateNotificacoeDto } from './dto/create-notificacoe.dto';
-import { UpdateNotificacoeDto } from './dto/update-notificacoe.dto';
+import { CreateNotificacoeDto } from '../dto/create-notificacao.dto';
+import { UpdateNotificacoeDto } from '../dto/update-notificacao.dto';
 import { InjectModel } from '@nestjs/mongoose';
-import { Notificacao } from './entities/notificacoe.entity';
+import { Notificacao } from '../entities/notificacao.schema';
 import { Model } from 'mongoose';
 
 @Injectable()
-export class NotificacoesService {
+export class NotificacaoService {
   constructor(
-    @InjectModel(Notificacao.name, 'notificacoes')
+    @InjectModel(Notificacao.name, 'admin')
     private notificaoModel: Model<Notificacao>
   ) {}
   
