@@ -10,7 +10,7 @@ import { InjectModel } from '@nestjs/mongoose';
 @Injectable()
 export class OrderService {
   constructor(
-    @InjectModel(Order.name, 'orders') private orderModel: Model<Order>
+    @InjectModel(Order.name, 'admin') private orderModel: Model<Order>
   ) {}
   
   async create(createOrderDto: CreateOrderDto) {

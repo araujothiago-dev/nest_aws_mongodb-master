@@ -9,7 +9,7 @@ import { User } from '../entities/user.schema';
 export class UsersService {
   constructor(
     // @InjectConnection() private userModel: Model<User>
-    @InjectModel(User.name, 'users') private userModel: Model<User>
+    @InjectModel(User.name, 'nestjs') private userModel: Model<User>
   ) {}
   create(createUserDto: CreateUserDto) {
     const createUser = new this.userModel(createUserDto);
