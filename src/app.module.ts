@@ -6,7 +6,7 @@ import { OrderModule } from './order/order.module';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { ScheduleModule } from '@nestjs/schedule';
-import { NotificacoesModule } from './notificacoes/notificacoes.module';
+import { NotificacaoModule } from './notificacao/notificacao.module';
 
 require('dotenv').config();
 
@@ -17,13 +17,13 @@ require('dotenv').config();
     }),
     ScheduleModule.forRoot(),
     MongooseModule.forRoot(<string>process.env.MONGO_URI, {
-      connectionName: 'orders',
+      connectionName: 'admin',
     }),
     MongooseModule.forRoot(<string>process.env.MONGO_URI2, {
-      connectionName: 'users',
+      connectionName: 'nestjs',
     }),
     UsersModule, 
-    OrderModule, NotificacoesModule
+    OrderModule, NotificacaoModule
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,11 +1,11 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { NotificacoesService } from './notificacoes.service';
-import { CreateNotificacoeDto } from './dto/create-notificacoe.dto';
-import { UpdateNotificacoeDto } from './dto/update-notificacoe.dto';
+import { CreateNotificacoeDto } from '../dto/create-notificacao.dto';
+import { UpdateNotificacoeDto } from '../dto/update-notificacao.dto';
+import { NotificacaoService } from '../services/notificacao.service';
 
 @Controller('notificacoes')
-export class NotificacoesController {
-  constructor(private readonly notificacoesService: NotificacoesService) {}
+export class NotificacaoController {
+  constructor(private readonly notificacoesService: NotificacaoService) {}
 
   @Post()
   create(@Body() createNotificacoeDto: CreateNotificacoeDto) {
