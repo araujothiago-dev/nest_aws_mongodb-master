@@ -1,1 +1,5 @@
-export class CreateNotificacoeDto {}
+export class CreateNotificacoeDto {
+    userId: number;
+
+    orderAmount: number;
+}
