@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  nest_aws_mongodb:
+    container_name: 'nest_aws_mongodb'
+    hostname: 'nest_aws_mongodb'
+    image: nest_aws_mongodb
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: always
+    command: npm run start:dev && "--log.level=FATAL"
+    ports:
+      - "3003:3003"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
