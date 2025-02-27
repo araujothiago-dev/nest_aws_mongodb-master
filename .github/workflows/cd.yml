@@ -2,9 +2,7 @@ name: CD Pipeline
 
 on:
   push:
-    branches:
-      - develop
-      - master
+    branches: [ master ]
 
 jobs:
   pipeline-cd:
