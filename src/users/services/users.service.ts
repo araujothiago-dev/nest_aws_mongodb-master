@@ -31,6 +31,11 @@ export class UsersService {
 
   findOne(id: string) {
     const user = this.userModel.findOne({id}).exec();
+
+    if (!user) {
+      throw 'User not found! '
+    }
+
     return user;
   }
 

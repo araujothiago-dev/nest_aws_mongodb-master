@@ -13,14 +13,32 @@ export class NotificacaoService {
   ) {}
   
   create(createNotificacoeDto: CreateNotificacoeDto) {
-    return 'This action adds a new notificacoe';
+    const createNotificacao = new this.notificaoModel(createNotificacoeDto);
+
+    const notificacao = createNotificacao.save();
+
+    return notificacao;
   }
 
   findAll() {
-    return `This action returns all notificacoes`;
+    const notificacoes = this.notificaoModel.find().exec();
+
+    if(!notificacoes) {
+      throw 'Notificacoes not found';
+    }
+
+    return notificacoes;
   }
 
-  findOne(id: number) {
+  findOne(id: string) {
+    const notificacao = this.notificaoModel.findOne({id}).exec();
+    
+    if(!notificacao) {
+      throw 'Notificacao not found';
+    }
+
+    return notificacao;
+
     return `This action returns a #${id} notificacoe`;
   }
 
