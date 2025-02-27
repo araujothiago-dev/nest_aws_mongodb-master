@@ -38,12 +38,4 @@ jobs:
             cd /srv/sistemas/nest_aws_mongodb-master &&
             git fetch &&
             git checkout ${{ env.branch }} &&
-            git pull origin ${{ env.branch }} &&
-            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
-            echo "TZ=${{ secrets.TZ }}" >> .env &&
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
-            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
-            echo "PORT=${{ secrets.PORT }}" >> .env &&
-            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
-            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
-            docker-compose up -d --build
+            git pull origin ${{ env.branch }}
