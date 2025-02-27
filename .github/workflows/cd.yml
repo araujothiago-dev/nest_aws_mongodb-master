@@ -30,7 +30,6 @@ jobs:
         with:
           host: ${{ secrets.UBUNTU_HOST }}
           username: ${{ secrets.UBUNTU_USER }}
-          password: ${{ secrets.UBUNTU_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/sistemas/nest_aws_mongodb-master &&
@@ -38,11 +37,11 @@ jobs:
             git checkout ${{ steps.extract_branch.outputs.branch }} &&
             git pull origin ${{ steps.extract_branch.outputs.branch }} &&
             cd /srv/sistemas/nest_aws_mongodb-master &&
-            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env
-            echo "TZ=${{ secrets.TZ }}" >> .env
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
-            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env
-            echo "PORT=${{ secrets.PORT }}" >> .env
-            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env
-            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
+            echo "TZ=${{ secrets.TZ }}" >> .env &&
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
+            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
+            echo "PORT=${{ secrets.PORT }}" >> .env &&
+            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
+            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env  &&
             docker-compose up -d --build
