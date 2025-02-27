@@ -18,7 +18,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '14'
+          node-version: '20'
 
       - name: Extract branch name
         shell: bash
@@ -31,7 +31,7 @@ jobs:
           host: ${{ secrets.UBUNTU_HOST }}
           username: ${{ secrets.UBUNTU_USER }}
           password: ${{ secrets.UBUNTU_PASSWORD }}
-          key: ${{ secrets.GIT_TOKEN }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/sistemas/nest_aws_mongodb-master &&
             git fetch &&
