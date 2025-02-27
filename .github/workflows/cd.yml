@@ -12,37 +12,38 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Faz o checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Configura o Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
           node-version: '14'
 
+      # Extrai o nome da branch
       - name: Extract branch name
         shell: bash
-        run: echo "##[set-output name=branch;]${GITHUB_REF#refs/heads/}"
-        id: extract_branch
+        run: echo "branch=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
+      # Acessa o servidor Ubuntu e executa os comandos
       - name: Access Ubuntu and git pull
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.UBUNTU_HOST }}
           username: ${{ secrets.UBUNTU_USER }}
-          password: ${{ secrets.UBUNTU_PASSWORD }}
           key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/sistemas/nest_aws_mongodb-master &&
             git fetch &&
-            git checkout ${{ steps.extract_branch.outputs.branch }} &&
-            git pull origin ${{ steps.extract_branch.outputs.branch }} &&
-            cd /srv/sistemas/nest_aws_mongodb-master &&
-            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env
-            echo "TZ=${{ secrets.TZ }}" >> .env
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env
-            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env
-            echo "PORT=${{ secrets.PORT }}" >> .env
-            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env
-            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
+            git checkout ${{ env.branch }} &&
+            git pull origin ${{ env.branch }} &&
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
+            echo "TZ=${{ secrets.TZ }}" >> .env &&
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
+            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
+            echo "PORT=${{ secrets.PORT }}" >> .env &&
+            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
+            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
             docker-compose up -d --build
