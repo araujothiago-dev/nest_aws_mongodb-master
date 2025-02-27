@@ -31,6 +31,7 @@ jobs:
           host: ${{ secrets.UBUNTU_HOST }}
           username: ${{ secrets.UBUNTU_USER }}
           password: ${{ secrets.UBUNTU_PASSWORD }}
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
           script: |
             cd /srv/sistemas/nest_aws_mongodb-master &&
             git fetch &&
