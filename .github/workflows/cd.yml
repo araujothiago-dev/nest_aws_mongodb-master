@@ -45,9 +45,26 @@ jobs:
           echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
           echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
 
+      - name: "Set up Dockerfile"
+        run: |
+          echo "FROM node:14" > Dockerfile
+          echo "WORKDIR /home/node/nest_aws_mongodb-master" >> Dockerfile
+          echo "COPY package*.json ./" >> Dockerfile
+          echo "RUN npm install" >> Dockerfile
+          echo "COPY . ." >> Dockerfile
+          echo "RUN npm run build" >> Dockerfile
+          echo "EXPOSE 3000" >> Dockerfile
+          echo "CMD ["node", "dist/main"]" >> Dockerfile
+
       # Verifica a versão do Ubuntu para confirmar que o runner está ativo
       - name: Verificar versão do Ubuntu
         run: lsb_release -a
+
+      # Usa a chave SSH para autenticação
+      - name: Setup SSH key
+        uses: webfactory/ssh-agent@v0.5.3
+        with:
+          ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
       # Acessa o servidor Ubuntu e executa os comandos
       - name: Access Ubuntu and git pull
@@ -61,11 +78,4 @@ jobs:
             git fetch &&
             git checkout develop &&
             git pull origin develop --rebase &&
-            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
-            echo "TZ=${{ secrets.TZ }}" >> .env &&
-            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
-            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
-            echo "PORT=${{ secrets.PORT }}" >> .env &&
-            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
-            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
             docker-compose up -d --build
