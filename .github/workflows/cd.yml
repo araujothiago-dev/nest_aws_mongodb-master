@@ -61,10 +61,13 @@ jobs:
         run: lsb_release -a
 
       # Usa a chave SSH para autenticação
-      - name: Setup SSH key
+      - name: Setup up SSH agent
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+      - name: Check out code
+        uses: actions/checkout@v3
 
       # Acessa o servidor Ubuntu e executa os comandos
       - name: Access Ubuntu and git pull
