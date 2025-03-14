@@ -10,7 +10,7 @@ jobs:
     runs-on: self-hosted
     strategy:
       matrix:
-        node-version: [14.x]
+        node-version: [21.x]
 
     steps:
       # Faz o checkout do repositório
@@ -69,7 +69,7 @@ jobs:
             echo "PATH_API=${{ secrets.PATH_API }}" >> .env &&
             echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
             echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
-            echo "FROM node:14" > Dockerfile &&
+            echo "FROM node:21" > Dockerfile &&
             echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile &&
             echo "COPY package*.json ./" >> Dockerfile &&
             echo "RUN npm install --legacy-peer-deps" >> Dockerfile &&
