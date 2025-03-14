@@ -46,7 +46,7 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ vars.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
 
   fortify:
     runs-on: self-hosted
@@ -93,7 +93,8 @@ jobs:
 
   deploy:
     runs-on: self-hosted
-    needs: generateimage
+    # needs: generateimage
+    needs: build
     steps:
       # Faz o checkout do código
       - name: Checkout code
