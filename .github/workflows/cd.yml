@@ -24,17 +24,14 @@ jobs:
           node-version: ${{ matrix.node-version }}
           cache: 'npm'
 
+      # Limpa o cache e instala os pacotes
       - name: "Clear cache and install packages"
         run: |
           rm -rf node_modules package-lock.json
           npm cache clean --force
           npm install
-        
-      # Instala os pacotes
-      # - name: "Install packages"
-      #   run: npm install
 
-      # Cria o arquivo .env
+      # Cria o arquivo .env no diretório de trabalho atual
       - name: "Create .env"
         run: |
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
@@ -46,6 +43,7 @@ jobs:
           echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
           echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
 
+      # Configura o Dockerfile
       - name: "Set up Dockerfile"
         run: |
           echo "FROM node:14" > Dockerfile
@@ -55,7 +53,7 @@ jobs:
           echo "COPY . ." >> Dockerfile
           echo "RUN npm run build" >> Dockerfile
           echo "EXPOSE process.env.PORT" >> Dockerfile
-          echo "CMD ["node", "dist/main"]" >> Dockerfile
+          echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile
 
       # Verifica a versão do Ubuntu para confirmar que o runner está ativo
       - name: Verificar versão do Ubuntu
@@ -67,12 +65,14 @@ jobs:
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
 
+      # Faz o checkout do código
       - name: Check out code
         uses: actions/checkout@v3
 
+      # Testa a conexão SSH
       - name: Testar Conexão SSH
         run: ssh -o StrictHostKeyChecking=no -i ~/.ssh/id_rsa ${{ secrets.UBUNTU_USER }}@${{ secrets.UBUNTU_HOST }} "echo 'Conexão SSH bem-sucedida'"
-            
+
       # Acessa o servidor Ubuntu e executa os comandos
       - name: Access Ubuntu and git pull
         uses: appleboy/ssh-action@master
@@ -85,4 +85,20 @@ jobs:
             git fetch &&
             git checkout develop &&
             git pull origin develop --rebase &&
+            echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
+            echo "TZ=${{ secrets.TZ }}" >> .env &&
+            echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
+            echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
+            echo "PORT=${{ secrets.PORT }}" >> .env &&
+            echo "PATH_API=${{ secrets.PATH_API }}" >> .env &&
+            echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
+            echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
+            echo "FROM node:14" > Dockerfile
+            echo "WORKDIR process.env.PATH_API" >> Dockerfile
+            echo "COPY package*.json ./" >> Dockerfile
+            echo "RUN npm install" >> Dockerfile
+            echo "COPY . ." >> Dockerfile
+            echo "RUN npm run build" >> Dockerfile
+            echo "EXPOSE process.env.PORT" >> Dockerfile
+            echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile
             docker-compose up -d --build
