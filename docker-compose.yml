@@ -14,15 +14,15 @@ services:
       - "3003:3003"
     environment:
       - NODE_ENV=production
-    depends_on:
-      - mongodb
+    # depends_on:
+    #   - mongodb
 
-  mongodb:
-    image: mongo:latest
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongo-data:/data/db
+  # mongodb:
+  #   image: mongo:latest
+  #   ports:
+  #     - "27017:27017"
+  #   volumes:
+  #     - mongo-data:/data/db
 
-volumes:
-  mongo-data:
+# volumes:
+#   mongo-data:
