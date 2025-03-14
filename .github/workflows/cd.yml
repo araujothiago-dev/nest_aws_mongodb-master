@@ -94,11 +94,11 @@ jobs:
             echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
             echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
             echo "FROM node:14" > Dockerfile
-            echo "WORKDIR process.env.PATH_API" >> Dockerfile
+            echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
             echo "COPY package*.json ./" >> Dockerfile
             echo "RUN npm install" >> Dockerfile
             echo "COPY . ." >> Dockerfile
             echo "RUN npm run build" >> Dockerfile
-            echo "EXPOSE process.env.PORT" >> Dockerfile
+            echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
             echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile
             docker-compose up -d --build
