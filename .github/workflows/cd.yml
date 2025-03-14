@@ -74,7 +74,7 @@ jobs:
             echo "COPY package*.json ./" >> Dockerfile &&
             echo "RUN npm install --legacy-peer-deps" >> Dockerfile &&
             echo "COPY . ." >> Dockerfile &&
-            echo "RUN npm run build" >> Dockerfile &&
+            # echo "RUN npm run build" >> Dockerfile &&
             echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile &&
-            echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile &&
+            echo "CMD ["node", "dist/main"]" >> Dockerfile &&
             docker-compose up -d --build
