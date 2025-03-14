@@ -31,30 +31,6 @@ jobs:
           npm cache clean --force
           npm install
 
-      # Cria o arquivo .env no diretório de trabalho atual
-      - name: "Create .env"
-        run: |
-          echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
-          echo "TZ=${{ secrets.TZ }}" >> .env &&
-          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
-          echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
-          echo "PORT=${{ secrets.PORT }}" >> .env &&
-          echo "PATH_API=${{ secrets.PATH_API }}" >> .env &&
-          echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
-          echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
-
-      # Configura o Dockerfile
-      - name: "Set up Dockerfile"
-        run: |
-          echo "FROM node:14" > Dockerfile
-          echo "WORKDIR process.env.PATH_API" >> Dockerfile
-          echo "COPY package*.json ./" >> Dockerfile
-          echo "RUN npm install" >> Dockerfile
-          echo "COPY . ." >> Dockerfile
-          echo "RUN npm run build" >> Dockerfile
-          echo "EXPOSE process.env.PORT" >> Dockerfile
-          echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile
-
       # Verifica a versão do Ubuntu para confirmar que o runner está ativo
       - name: Verificar versão do Ubuntu
         run: lsb_release -a
@@ -93,12 +69,12 @@ jobs:
             echo "PATH_API=${{ secrets.PATH_API }}" >> .env &&
             echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
             echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
-            echo "FROM node:14" > Dockerfile
-            echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
-            echo "COPY package*.json ./" >> Dockerfile
-            echo "RUN npm install" >> Dockerfile
-            echo "COPY . ." >> Dockerfile
-            echo "RUN npm run build" >> Dockerfile
-            echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
-            echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile
+            echo "FROM node:14" > Dockerfile &&
+            echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile &&
+            echo "COPY package*.json ./" >> Dockerfile &&
+            echo "RUN npm install --legacy-peer-deps" >> Dockerfile &&
+            echo "COPY . ." >> Dockerfile &&
+            echo "RUN npm run build" >> Dockerfile &&
+            echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile &&
+            echo "CMD [\"node\", \"dist/main\"]" >> Dockerfile &&
             docker-compose up -d --build
