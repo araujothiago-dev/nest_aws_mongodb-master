@@ -6,7 +6,7 @@ on:
     branches: [ develop ]
 
 jobs:
-  pipeline-cd:
+  build:
     runs-on: self-hosted
     strategy:
       matrix:
@@ -31,15 +31,14 @@ jobs:
           npm cache clean --force
           npm install
 
+      # Instala os pacotes
       - name: "Install packages"
         run: npm install
 
-      
   deploy:
     runs-on: self-hosted
-    # needs: generateimage
-    needs: pipeline-cd
-    steps:      
+    needs: build
+    steps:
       # Verifica a versão do Ubuntu para confirmar que o runner está ativo
       - name: Verificar versão do Ubuntu
         run: lsb_release -a
@@ -83,7 +82,8 @@ jobs:
             echo "COPY package*.json ./" >> Dockerfile &&
             echo "RUN npm install --legacy-peer-deps" >> Dockerfile &&
             echo "COPY . ." >> Dockerfile &&
-            # echo "RUN npm run build" >> Dockerfile &&
+            echo "RUN npm run build" >> Dockerfile &&
             echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile &&
             echo "CMD ["node", "dist/main"]" >> Dockerfile &&
+            docker-compose down &&
             docker-compose up -d --build
