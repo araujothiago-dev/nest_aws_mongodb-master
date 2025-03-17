@@ -11,6 +11,6 @@ services:
     restart: always
     command: npm run start:dev && "--log.level=FATAL"
     ports:
-      - "${{ secrets.PORT }}:${{ secrets.PORT }}"
+      - "3003:3003"
     environment:
       - NODE_ENV=production
