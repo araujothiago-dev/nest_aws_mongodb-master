@@ -1,10 +1,10 @@
+# Configura o pipeline de CI para ser executado em push para a branch develop
 name: CI Pipeline
 
 on:
-  pull_request:
+  push:
     branches:
       - develop
-      - master
 
 jobs:
   build:
@@ -15,9 +15,11 @@ jobs:
         node-version: [21.x]
 
     steps:
+      # Faz o checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v2
 
+      # Configura o Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v2
         with:
@@ -30,10 +32,12 @@ jobs:
           rm -rf node_modules package-lock.json
           npm cache clean --force
           npm install
-      
+
+      # Instala os pacotes
       - name: "Install packages"
         run: npm install
 
+      # Cria o arquivo .env
       - name: "Create .env"
         run: |
           echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
@@ -45,23 +49,26 @@ jobs:
           echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
           echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
 
+      # Configura o Dockerfile
       - name: "Set up Dockerfile"
         run: |
-          echo "FROM node:14" > Dockerfile
+          echo "FROM node:21" > Dockerfile
           echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
           echo "COPY package*.json ./" >> Dockerfile
           echo "RUN npm install --legacy-peer-deps" >> Dockerfile
           echo "COPY . ." >> Dockerfile
           echo "RUN npm run build" >> Dockerfile
           echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
-          echo "CMD ["node", "dist/main"]" >> Dockerfile
+          echo 'CMD ["node", "dist/main"]' >> Dockerfile
 
+      # Login no Docker
       - name: "Docker login"
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
+      # Build e push da imagem Docker
       - name: "Build Docker image"
         uses: docker/build-push-action@v3.2.0
         with:
@@ -71,7 +78,7 @@ jobs:
           tags: |
             thiaguinhobyra/nest_aws_mongodb:v1
             thiaguinhobyra/nest_aws_mongodb:latest
-            
+
   # sonarqube:
   #   runs-on: self-hosted
   #   needs: build

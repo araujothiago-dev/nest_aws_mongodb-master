@@ -1,9 +1,8 @@
-# Configura o pipeline de CD para ser executado em push para a branch develop
 name: CD Pipeline
 
 on:
-  push:
-    branches: [ develop ]
+  pull_request:
+    branches: [ develop, master ]
 
 jobs:
   build:
