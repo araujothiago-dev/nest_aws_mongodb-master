@@ -27,6 +27,28 @@ jobs:
       - name: "Install packages"
         run: npm install
 
+      - name: "Create .env"
+        run: |
+          echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
+          echo "TZ=${{ secrets.TZ }}" >> .env &&
+          echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
+          echo "MONGO_URI2=${{ secrets.MONGO_URI2 }}" >> .env &&
+          echo "PORT=${{ secrets.PORT }}" >> .env &&
+          echo "PATH_API=${{ secrets.PATH_API }}" >> .env &&
+          echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
+          echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env
+
+      - name: "Set up Dockerfile"
+        run: |
+          echo "FROM node:14" > Dockerfile
+          echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
+          echo "COPY package*.json ./" >> Dockerfile
+          echo "RUN npm install --legacy-peer-deps" >> Dockerfile
+          echo "COPY . ." >> Dockerfile
+          echo "RUN npm run build" >> Dockerfile
+          echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
+          echo "CMD ["node", "dist/main"]" >> Dockerfile
+
       - name: "Docker login"
         uses: docker/login-action@v2
         with:
