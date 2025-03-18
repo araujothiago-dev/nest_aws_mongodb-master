@@ -114,11 +114,11 @@ jobs:
       # Instala o Trivy
       - name: Install Trivy
         run: |
-          sudo apt-get update -y
-          sudo apt-get install -y wget
-          wget -qO trivy.tar.gz https://github.com/aquasecurity/trivy/releases/latest/download/trivy_0.43.1_Linux-64bit.tar.gz
-          tar zxvf trivy.tar.gz -C /usr/local/bin/
-          rm trivy.tar.gz
+          sudo apt-get update &&
+          sudo apt-get install -y wget &&
+          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz &&
+          tar zxvf trivy_Linux-64bit.tar.gz &&
+          sudo mv trivy /usr/local/bin/ &&
           rivy --version
 
       # Executa o Trivy para análise de vulnerabilidades
