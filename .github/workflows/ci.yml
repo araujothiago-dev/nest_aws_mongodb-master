@@ -108,20 +108,23 @@ jobs:
     needs: build
     steps:
       # Faz o checkout do repositório
-      - name: Checkout repository
-        uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-      # Instala o Trivy
-      - name: Install Trivy
-        run: |
-          sudo apt-get update &&
-          sudo apt-get install -y wget &&
-          wget https://github.com/aquasecurity/trivy/releases/latest/download/trivy_Linux-64bit.tar.gz &&
-          tar zxvf trivy_Linux-64bit.tar.gz &&
-          sudo mv trivy /usr/local/bin/ &&
-          rivy --version
+      - name: Build an image from Dockerfile
+        run: docker build -t docker.io/thiaguinhobyra/nest_aws_mongodb:latest .
+        
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.30.0
+        with:
+          image-ref: 'docker.io/thiaguinhobyra/nest_aws_mongodb:latest'
+          format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL,HIGH'
 
-      # Executa o Trivy para análise de vulnerabilidades
-      - name: Run Trivy scan
-        run: |
-          ./trivy image --exit-code 1 --severity HIGH,CRITICAL thiaguinhobyra/nest_aws_mongodb:latest
+      # # Executa o Trivy para análise de vulnerabilidades
+      # - name: Run Trivy scan
+      #   run: |
+      #     ./trivy image --exit-code 1 --severity HIGH,CRITICAL thiaguinhobyra/nest_aws_mongodb:latest
