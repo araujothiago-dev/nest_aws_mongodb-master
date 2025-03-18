@@ -72,15 +72,15 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5.0.0
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_URL }}
 
   dockerimage:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: sonarqube
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        
+
           # Login no Docker
       - name: "Docker login"
         uses: docker/login-action@v2
