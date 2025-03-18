@@ -61,7 +61,27 @@ jobs:
           echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
           echo 'CMD ["node", "dist/main"]' >> Dockerfile
 
-      # Login no Docker
+  sonarqube:
+    runs-on: self-hosted
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+      - name: SonarQube Scan
+        uses: SonarSource/sonarqube-scan-action@v5.0.0
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
+
+  dockerimage:
+    runs-on: self-hosted
+    needs: sonarqube
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        
+          # Login no Docker
       - name: "Docker login"
         uses: docker/login-action@v2
         with:
@@ -78,16 +98,3 @@ jobs:
           tags: |
             thiaguinhobyra/nest_aws_mongodb:v1
             thiaguinhobyra/nest_aws_mongodb:latest
-
-  # sonarqube:
-  #   runs-on: self-hosted
-  #   needs: build
-  #   steps:
-  #     - name: Checkout code
-  #       uses: actions/checkout@v4
-        
-  #     - name: SonarQube Scan
-  #       uses: SonarSource/sonarqube-scan-action@v5.0.0
-  #       env:
-  #         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-  #         SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}
