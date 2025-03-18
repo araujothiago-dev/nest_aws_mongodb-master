@@ -39,7 +39,7 @@ jobs:
     needs: sonarqube
     strategy:
       matrix:
-        node-version: [21.x]
+        node-version: [20-alpine]
 
     steps:
       # Faz o checkout do repositório
@@ -79,10 +79,11 @@ jobs:
       # Configura o Dockerfile
       - name: "Set up Dockerfile"
         run: |
-          echo "FROM node:21" > Dockerfile
+          echo "FROM node:20-alpine" > Dockerfile
           echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
           echo "COPY package*.json ./" >> Dockerfile
           echo "RUN npm install --legacy-peer-deps" >> Dockerfile
+          echo "RUN npm audit fix --force" >> Dockerfile
           echo "COPY . ." >> Dockerfile
           echo "RUN npm run build" >> Dockerfile
           echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
