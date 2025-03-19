@@ -1,9 +1,8 @@
-# Configura o pipeline de CD para ser executado em push para a branch develop
 name: CD Pipeline
 
 on:
-  push:
-    branches: [ develop ]
+  pull_request:
+    branches: [ master ]
 
 jobs:
   build:
@@ -67,8 +66,8 @@ jobs:
           script: |
             cd /srv/sistemas/nest_aws_mongodb-master &&
             git fetch &&
-            git checkout develop &&
-            git pull origin develop --rebase &&
+            git checkout master &&
+            git pull origin master --rebase &&
             echo "NODE_ENV=${{ secrets.NODE_ENV }}" > .env &&
             echo "TZ=${{ secrets.TZ }}" >> .env &&
             echo "MONGO_URI=${{ secrets.MONGO_URI }}" >> .env &&
