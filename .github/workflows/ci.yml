@@ -39,7 +39,7 @@ jobs:
     needs: sonarqube
     strategy:
       matrix:
-        node-version: [21.x]
+        node-version: [22.x]
 
     steps:
       # Faz o checkout do repositório
@@ -79,7 +79,7 @@ jobs:
       # Configura o Dockerfile
       - name: "Set up Dockerfile"
         run: |
-          echo "FROM node:21" > Dockerfile
+          echo "FROM node:22" > Dockerfile
           echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
           echo "COPY package*.json ./" >> Dockerfile
           echo "RUN npm install --legacy-peer-deps" >> Dockerfile
@@ -106,24 +106,24 @@ jobs:
             thiaguinhobyra/nest_aws_mongodb:v1
             thiaguinhobyra/nest_aws_mongodb:latest
 
-  # trivy:
-  #   name: Security Scan with Trivy
-  #   runs-on: ubuntu-latest
-  #   needs: build
-  #   steps:
-  #     # Faz o checkout do repositório
-  #     - name: Checkout code
-  #       uses: actions/checkout@v3
+  trivy:
+    name: Security Scan with Trivy
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      # Faz o checkout do repositório
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-  #     # - name: Build an image from Dockerfile
-  #     #   run: docker build -t docker.io/thiaguinhobyra/nest_aws_mongodb:latest .
+      # - name: Build an image from Dockerfile
+      #   run: docker build -t docker.io/thiaguinhobyra/nest_aws_mongodb:latest .
 
-  #     - name: Run Trivy vulnerability scanner
-  #       uses: aquasecurity/trivy-action@0.28.0
-  #       with:
-  #         image-ref: 'docker.io/thiaguinhobyra/nest_aws_mongodb:latest'
-  #         # format: 'table'
-  #         exit-code: '1'
-  #         ignore-unfixed: true
-  #         vuln-type: 'os,library'
-  #         severity: 'CRITICAL,HIGH'
+      - name: Run Trivy vulnerability scanner
+        uses: aquasecurity/trivy-action@0.28.0
+        with:
+          image-ref: 'docker.io/thiaguinhobyra/nest_aws_mongodb:latest'
+          # format: 'table'
+          exit-code: '1'
+          ignore-unfixed: true
+          vuln-type: 'os,library'
+          severity: 'CRITICAL'
