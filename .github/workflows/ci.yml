@@ -108,8 +108,8 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: |
-            araujothiago-dev/nest_aws_mongodb:v1
-            araujothiago-dev/nest_aws_mongodb:latest
+            thiaguinhobyra/nest_aws_mongodb:v1
+            thiaguinhobyra/nest_aws_mongodb:latest
 
   trivy:
     name: Security Scan with Trivy
