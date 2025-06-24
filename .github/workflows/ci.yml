@@ -121,12 +121,12 @@ jobs:
         uses: actions/checkout@v3
 
       # - name: Build an image from Dockerfile
-      #   run: docker build -t docker.io/araujothiago-dev/nest_aws_mongodb:latest .
+      #   run: docker build -t docker.io/thiaguinhobyra/nest_aws_mongodb:latest .
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@0.28.0
         with:
-          image-ref: 'docker.io/araujothiago-dev/nest_aws_mongodb:latest'
+          image-ref: 'docker.io/thiaguinhobyra/nest_aws_mongodb:latest'
           # format: 'table'
           exit-code: '1'
           ignore-unfixed: true
