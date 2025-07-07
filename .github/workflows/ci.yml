@@ -87,14 +87,14 @@ jobs:
           echo "FROM node:22-slim" > Dockerfile
           echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile
           echo "COPY package*.json ./" >> Dockerfile
-          echo "RUN apt-get update \\" >> Dockerfile
-          echo "&& apt-get upgrade -y \\" >> Dockerfile
-          echo "&& apt-get install -y --no-install-recommends \\" >> Dockerfile
-          echo "   python3 make g++ \\" >> Dockerfile
-          echo "&& npm install --legacy-peer-deps \\" >> Dockerfile
-          echo "&& apt-get purge -y --auto-remove python3 make g++ \\" >> Dockerfile
-          echo "&& apt-get clean \\" >> Dockerfile
-          echo "&& rm -rf /var/lib/apt/lists/* \\" >> Dockerfile
+          echo 'RUN apt-get update \\' >> Dockerfile
+          echo '  && apt-get upgrade -y \\' >> Dockerfile
+          echo '  && apt-get install -y --no-install-recommends \\' >> Dockerfile
+          echo '     python3 make g++ \\' >> Dockerfile
+          echo '  && npm install --legacy-peer-deps \\' >> Dockerfile
+          echo '  && apt-get purge -y --auto-remove python3 make g++ \\' >> Dockerfile
+          echo '  && apt-get clean \\' >> Dockerfile
+          echo '  && rm -rf /var/lib/apt/lists/*' >> Dockerfile
           echo "COPY . ." >> Dockerfile
           echo "RUN npm run build" >> Dockerfile
           echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile
