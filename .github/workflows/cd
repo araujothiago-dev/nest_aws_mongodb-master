@@ -88,8 +88,8 @@ jobs:
           context: .
           file: ./Dockerfile
           tags: |
-            thiaguinhobyra/nest_aws_mongodb:v1
-            thiaguinhobyra/nest_aws_mongodb:latest
+            araujothiago-dev/nest_aws_mongodb:v1
+            araujothiago-dev/nest_aws_mongodb:latest
 
   deploy:
     runs-on: self-hosted

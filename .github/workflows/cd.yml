@@ -6,7 +6,7 @@ on:
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         node-version: [22.x]
@@ -35,7 +35,7 @@ jobs:
         run: npm install
 
   deploy:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     needs: build
     steps:
       # Verifica a versão do Ubuntu para confirmar que o runner está ativo
@@ -76,10 +76,10 @@ jobs:
             echo "PATH_API=${{ secrets.PATH_API }}" >> .env &&
             echo "SYNCHRONIZE=${{ secrets.SYNCHRONIZE }}" >> .env &&
             echo "RUN_MIGRATIONS=${{ secrets.RUN_MIGRATIONS }}" >> .env &&
-            echo "FROM node:22" > Dockerfile &&
+            echo "FROM node:22-alpine AS build" > Dockerfile &&
             echo "WORKDIR ${{ secrets.PATH_API }}" >> Dockerfile &&
             echo "COPY package*.json ./" >> Dockerfile &&
-            echo "RUN npm install --legacy-peer-deps" >> Dockerfile &&
+            echo "RUN npm ci --legacy-peer-deps" >> Dockerfile &&
             echo "COPY . ." >> Dockerfile &&
             echo "RUN npm run build" >> Dockerfile &&
             echo "EXPOSE ${{ secrets.PORT }}" >> Dockerfile &&
